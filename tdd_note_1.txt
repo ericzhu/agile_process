@@ -1,0 +1,240 @@
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+---------------------- Introduction to Test Driven Development ---------------------------------
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+
+What is test-driven development
+
+*	Development approach keeping test one step ahead of your code to help drive the design 
+	of the system.
+
+	The idea of this approach is that you are designing and developping your code in 
+	conjunction with your test, in order to achieve a more structured and modular design which 
+	support automated testing upfront.
+
+	Thus TDD is also referred to as Test Driven Design.
+
+*	Test Driven Development --> Test Driven Design
+
+	The major goal of TDD and automated unit testing is to deliver functionality
+	in a more reliable manner. With the reliability that you won't have significant
+	issues introduced in these subsequent releases of your project. It does not
+	completely remove risk, but it goes a long way to reduce it.
+
+*	Early practices established anti-patterns
+
+	In earlier days of automated unit testing, developers would first write the 
+	functional code, then figure out how to write unit test to validate the assumptions
+	made in how the code should function. 
+
+	In best case, a developer would complete the code then figure out how to write the test
+	to support this.
+
+	In a less ideal case, the developer would write a complete functional slice of code from user 
+	interface to back to the database, crossing many application layers, and then figure out how to 
+	test for each of these modules.
+
+	A yet worse case than that, all functional development would be completed, and then the focus on
+	unit testing would finally begin.
+
+*	Problems with the traditional approach
+
+	The first real problem with this practice is the complete omission of thought in regards to
+	the testing will be performed. 
+
+	When developers don't factoring and testing upfront, they often forget identify complexities
+	of the methods. A method should do only one thing. When it becomes too complex or does too many
+	things, it should be broken down. 
+
+	When you wait too long time to focus on the method composition, you risk inadvently making a method
+	too complex, or you have the best intention to break it down latter, but run out of time.
+
+	Over long stretches, it becomes inefficient to try  to simplify code latter. And as more people 
+	touch the code to enhance the system, the complexity grows.
+
+	The second problem is that you have missed the real benefits of testing automation. 
+	With automation, you are able to add or revise code with certainty, you did not break unintentionly
+	break functionaliy or change assamptions previously held when create the code. The further you
+	differ automation, the more likely the change you made in futur feature development will
+	unintentionaly break something.
+
+	Another problem is the inevitable time crunch of projects. The more you test upfront, the 
+	greater gauge you have on how much effort is remaining to complete the project. Thus when you
+	save the tests until the end, you will enounter a few senarios.
+
+	In one senario, you have run out of time to automate any test. The code is functional, the
+	deadline is approached. It becomes difficualt to justify additional time, as your 
+	stakeholders view everything as functional within the system.
+
+	In another senario, you may have underestimated the true effort of testing and it has become
+	more complicated, because you didn't design the system with the idea of how to test it 
+	in your mind. 
+
+	If your estimate assumed half your time would be functional coding and half of your time would be 
+	testing coding. You believe you are half done when functional coding is completed. If the lack of
+	upfront thought in testing has make test creation more complex, you once again have more diffcult
+	justification for delaying the project. This is not to say that you want to sacrify some of 
+	your testing in a TDD approach, you will ensure you have some level of automated test coverage.
+
+	Lastly, saving all the tests to the end leads to a feeling of a daunting effort once you start
+	testing. You will typically try to figure out how to work around more complexity, and become
+	frustrated with the lack of structure you will encounter, because you were not thinking how the
+	test would be broken down and work in conjunction with your design of code.
+
+	The TDD approach brings more balance, so you are not doing too much testing or coding in a
+	disproportional manner.
+
+	TDD helps bring balance between functional coding and automated test coding. You will go back 
+	and forth constantly between your test and code. We will discuss this specific practice in a minute.
+
+	You gain reliable repeatability in your testing effort. Once the test is writen, it can be
+	repeatedly executed with no effort. This benefit is not just in current development iteration, but
+	in all future iterations. As your system expands, you make enhancement or fix defects. You ensure
+	that you don't inadvently break functionality. You also offer greater flexiblity to refactor your
+	code to achieve improved design over time with the reduced risk of introducing issues.
+
+	Another benefit is that you are designing up-front with testing in mind. You encounter smells early
+	on indicating that testing is becoming too complex, which usually indicate that your method under test
+	is becoming too complex. You encounter these complexites early in the design and development process
+	instead of latter when mountains of code has been built.
+
+	Keeping complexity of method low upfront help support reduced complexity as the system is maintained.
+
+	Finally you have a gauge of progress between your functional code development and the code of 
+	automated testing. You don't let the inbalance of the effort existing in one of the development aspects
+	take too long.
+
+	A major component of risk management is identifying potential problems early, so you have the ability
+	to reacting to create a mitigation plan. Thus TDD help support this in a visible manner.
+
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+----------------------------- Red Green and Refactor  ------------------------------------------
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+A common pattern in TDD is called Red, Green and Refactor.
+The premise of this approach is write a statment or a set of statements resulting a failing test.
+This will result in a red bar in the unit test runner display.
+
+Next you implement functionality, this should result in a green bar in the test runner, showing that
+you have fixed any error set up in the error step. Once this is completed, you decide if a 
+refactoring is needed to simplify the design. If you refactor some of the code, your test should 
+still pass.
+
+Depending on the complexity of the refactoring, you may need to consider refactoring your test
+as well. If you have no refactoring remaining, you then continue on with the test method, repeating
+this pattern until all aspects of this method's functionality are complete.
+
+During your project development assignments, there may be instances where you are reponsible for
+developing all layers of a user story. And other instances where you are responsible for a single layer
+accross all the stories. 
+
+Factors controling this typically depend on the size of project and the experience of team members
+in the various technologies leveraged.
+
+In the approach for developing all layers of a user story, you will determine a starting point
+in one of these layers and start applying RED-GREEN-REFACTOR approach to it. Once complete with the layer
+you will move on to the next layer, you will repeat this until you complete and can integrate all 
+the layers together for a fully functional test.
+
+In the approach where you focus on a single layer, you simply take a focus on that layer completing
+a broad set of functionalities. Once all developers have completed their layers, you will work as team
+to integrate them together and perform the functional test.
+
+In either of these two approaches, RED-GREEN-REFACTOR approach helps support the TDD design goals.
+
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+--------------------------------- Terminology --------------------------------------------------
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+At this point, I want to cover some terms used throughout this course.
+
+* 	xUnit Testing
+	This is a generic reference to automated unit testing using a unit testing framework. Junit
+	is an implementation of xUnit Testing framework, being adapted from a earlier verions of 
+	a smalltalk unit test frameworks. The same concept has been adopted in many other platforms
+	and for many different languages. And thus the general approach has been coined xUnit testing.
+
+*	Class-Under-Test
+	Automated unit test should focus on testing functionality of the methods in a single class. My
+	preference is to have one or more test classes corresponding to a single functional class.
+	The class being tested in this case would called the class under test.
+
+*	Method-Under-Test
+	This is the target method that a single junit test method will be executed to verify functionality
+	and validate the assumption you have made during the development of the functional code.
+
+	You should strive to test no more than one method under test within a single junit test method.
+	Howerver there are situations you may run into where you need to execute multiple methods within
+	the class under test. Often, these other executions are used to performed setup of state within th class.
+	They should be minimized, and there are techniques we will discuss in latter modules to support 
+	this principle.
+
+*	Test Fixture
+	This term emcompasses the setup of the data for use in test. This may be the setup of an object in
+	a certain state, may emcompass the setup of data in the database to support the test execution.
+	The best practice is to setup the fixture at the beginning of each test and tear down at the end.
+
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+--------------------------------- Misunderstanding of TDD --------------------------------------
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+*	How do I write all the test before I have written a line of functional code?
+	
+	This is a complete misinterpreation of TDD. Actually we don't need to do this.
+	1.	The RED-GREEN-REFACTOR approach is the true intent.
+	
+	2.	As you are developing, you will identify cases for the method under test that need to be
+		captured. stub these out. Creating empty method in the test class to ensure that you are
+		capturing the important conditions. Testing frameworks typically support the ability to 
+		ignore cases. So I will recommand this in the stub out test. So your execution results
+		give you the feedback that some work is remaining, and you don't forget to complete them 
+		later.
+	
+	3.	You won't capture every single condition upfront, you will often run into bugs that does not
+		appear in the initial unit testing, but become an issue once code is integrated.
+		The important part to bear in mind is that when you run into a bugs that made into passed unit
+		testing, ensure you write tests to cover that condition in a failing state before fixing the bug.
+		Once the test is passing. You know you have fixed the issue as long as all other tests continue
+		to pass.
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+--------------------------------- Testing Framework --------------------------------------------
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+*	Mockito
+	This framework support mocking and stubbing dependent interfaces and objects, help you implement
+	mock pattern in your test code. 
+	This framework will be covered in two modules. The first module will cover the concept of mocking 
+	and the core features of mockito. The second will cover advanced capabilities.
+	When testing a sigle method, you want to isolate the funcionalities so that you don't worry about 
+	the implementation details of the dependencies leveeraged in the method under test. 
+
+	These dependencies complicate automated test code, making it more obscure and unreliable. 
+	Mock patterns help give you control by removing direct use of these dependencies.
+
+*	DBUnit
+	This framework covers SQL-based database
+
+
+
+
+
+
+
+
+
+
+

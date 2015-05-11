@@ -1,0 +1,248 @@
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+---------------------------- Mockito Concept ---------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+Methods under test often leverage dependencies. Testing these method with 
+dependencies in place can become complicated and inpredictable.
+
+Mocking frameworks allows you to replace the dependencies and implementation
+classes with a mocked implementation during implementation. Thet help solve the 
+problems of database dependency, external system dependency, implementation classes
+that are not yet developed, or other issues you may encounter.
+
+You replace the dependencies with mock implemenations to better control your test.
+
+One way to create mocking is to create an implementation of the interface or an 
+extension of the dependency. This approach is tedious and obscure. It required a
+bit coding to account for many different conditions you want to test. It create a
+obscure test, because many of the details of the test conditions are in a seperate
+class.
+
+The idea behind mock frameworks is to privide capabilitis to allow you to create a 
+mocked implementation without creating a dedicated class. Instead the API uses
+dynamic proxies or similar feature to provide a generic implementation of the 
+interface or an extension of dependent class.
+
+This give you complete control to declare and verify how the method invocation on
+the dependencies will behave.
+
+Some populare Mock framework in Java are Mockito, EasyMock, JMock.
+
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+---------------------------- Mockito Overview --------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+Mockito provides classes and capabilities that help support the four stages of
+unit test cycles. It mostly focuses on the first 3: Setup, Execution and 
+Verification.
+
+* During the Setup phase, you use the framework to create mocks and declare how
+the dependencies should behave when called during the execution of the 
+method-under-test.
+
+* During the execution, the mocks go into a mode that responds to the request made
+by the method-under-test. The mocks will react specific sets of parameters to 
+control the behaviour of the interaction and any result returned.
+
+* During the verification, the frameworks provides capabilities to ensure mocks 
+will interact with the manner you intended. The most core operations center around
+Mockito class and a set of static methods it provides.
+
+
+Setup - Creating the mock
+ 	during setup phase you use Mockito mock method to create a mock of the dependency.
+	OrderDao mockOrderDao = Mokito.mock(OrderDao.class);
+
+Setup - Method stubbing
+	You then use the Mockito API further to declare what to do when the mocked operation
+	is invoked. This is called method stubing. 
+
+	Mockito.when(mockOrderDao.findById(idValue)).thenReturn(orderFixture);
+
+	It follows a when-then pattern. You specify how that operation should behave when it
+	is called with a specific set of parameter values. 
+
+Execution
+	You don't need to do anything special at the execution phase. The method-under-test 
+	simply uses the mock because it is injected as a member or passed through as a parameter.
+
+Verification
+	During verification you use Mockito verify method to assert that a particular methods were
+	called with a match set of inputs.
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+---------------------------- Creating Mock Instances -------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+Mockito.mock(Class<?> class) is the core method for creating mocks.
+
+One way to avoid repeatedly creating mocks is to make the mock a member of the
+test class and initialize it in the setup method.
+
+----------------------------------------------------
+class OrderServiceTest {
+
+	protected @Mock OrderDao mockOrderDao;
+
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	}
+
+	@Test
+	public void test_getOrderSummary_success {
+		// Testing code comes here
+	}
+}
+-----------------------------------------------------
+
+Sometime mock instance needs to have more capabilities. Suppose you have a dependency
+that implements multiple interfaces. The mock method offers an overloaded version
+accepting a MockSettings interface.
+
+"Mockito.withSettings()" returns a MockSettings instance which allows you further
+specify what you want to configure, leveraging chainable method offered in this
+interface.
+
+-> Use MockSettings.extraInterfaces(..) to add interfaces supported by the mock.
+-> MockSettings.serializable() creates a mock whick can be bassed as a serializable object.
+-> MockSettings.name(..) specifies a name when verification of the mock fails.
+
+class OrderServiceImplTest {
+	private OrderServiceImpl target = ...
+
+	public void test_getOrderSummary_success() {
+		MockSettings settings = Mockito.withSettings();
+		OrderDao mockOrderDao = Mockito.mock(OrderDao.class, settings);
+	}
+}
+
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+---------------------------- Stubbing method calls ---------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+
+*	Method stubbing allows you to set the expectation of how mock dependency
+	should behave when invoked. Mockito offers a lot of flexibility in this
+	regard. We will cover the basics here and dive deeper into the concepts
+	like argument capturing and argument matching.
+
+*	Calling Mockito.when(..) returns OngoinStub<T>, specifying how the invocation
+	behaves.
+
+*	The basic method stubbing follows a When-Then pattern. Using the "Mockito"
+	class, you specify a method invocation against mock as argument to the
+	"when" method call. This call returns an OngoingStub<T>, which is a generic
+	base type. The specific type of the instance derives from the returned type
+	of operation being called on the mock.
+
+	You then use the instance of the OngoingStub<T> to specify what return upon
+	the invocation of the operation. 
+
+	OngoingStub support the following operations
+	.thenReturn(..)
+	.thenThrow(..)
+	.thenCallRealMethod(..)
+	.thenAnswer(..)
+
+->	.thenReturn(..) specifies object or value , base on the return type of the 
+	operation being stubbed, to return when method called.
+
+->	.thenThrow(..) specifies mock invocation should result in exception thrown.
+
+->	Mocking void methods do not work with OngoingStub<T>. For normal circomstances,
+	we don't need to stub calls to void methods invocation, as there is nothing to 
+	happen conditionally. because there is no response to impact behavior. 
+
+	However sometimes the void method may throw an exception. To cover this mockito 
+	offers an alternative for stubbing. Use "Mockito.doThrow(..)" to returns the 
+	Stubber class, rather than OngoingStub. Using the Stubber, we then use the method 
+	when to declare mock method triggering the exception to throw. This reverse the 
+	order of When-Then, focusing on declaring the outcome first.
+
+
+*	There are two additional stubbing features I want to provide brief description 
+	for, we will explore further in the next module, because each requires extra 
+	knowledge to further understand.
+
+	-> Delegation to real method
+
+	-> Answering
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------ Verification ----------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+Mockito supports verification through the Mockito.verify(..) method. This method
+returns a proxied object based on the type passed in, allowing you then declare
+the operation you expect to invoke during the execution of the test.
+
+----------------------------------------
+// Setup
+Mockito.when(mockOrderService.getOrderSummary(customerId)).thenReturn(orderList);
+
+// Verification
+OrderService verificationProxy = Mockito.verify(mockOrderService);
+verificationProxy.getOrderSummary(customerId);
+
+----------------------------------------
+
+Verifications don't always have corresponding stubbed methods, especially when the
+method being mocked returns void. You may still want to verify the method is called,
+but have no need to stub it out and return a value.
+
+As a rule of thumb, if you expect the mock operation to be called, then you should
+verify it is called. It helps identify potential issues in later development iterations.
+Developers may changes a piece of code that has unintended consequence. By verifying
+the mock was used, you can get an early detection of this type of issue.
+
+VerificationMode allows extra verification of the operation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

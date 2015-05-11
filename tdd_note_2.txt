@@ -1,0 +1,134 @@
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+------------------------ Eclipse Plugins --------------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+*	EclEmma - Java Code Coverage Plugin
+
+*	SubEclipse - Subversion plugin
+
+*	H2 Database
+		H2 is a relational database written in Java. It was designed with
+		flexibility in mind. It supports for in-process & out-of-process
+		execution.
+
+		When running in process, you can persist the data into a file or keep
+		it purely in memory. When writing test againt relational database, in
+		memory database is helpful, as you are guranteed to have a new copy of
+		the database at the start of each new test execution.
+
+		We can down H2 database as a Windows Installer or Zip file.
+
+		C:\Java\h2\bin>h2w.bat to start H2 Database server. At the end of start
+		a browser will be opened.
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+----------------------- Junit Testing Concept ---------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+*	Junit core concept
+	Junit is a framework allowing Java developers to write automated
+	unit tests.
+
+	You write a test class with the purpose of executing the functionality
+	within a corresponding class.
+
+	A good unit test follows 4 steps: setup, execution, verification and
+	teardown.
+
+	->	Setup: 
+		This step involves the establishment of data and fixtures needed to execute 
+		the test. Because we are testing methods in a class, this involves instantiating 
+		parameters to be passed into the method-under-test or setting object dependencies
+		used within this method, for it to be properly executed. Some other example inludes
+		setting up data in a database or creating for use in the method-under-test.
+
+	->	Execution: 
+		This step involves the invocation of the method-under-test. Test class
+		should contains one or more test methods, exercises each method in the 
+		class-under-test. When creating unit level test, I typically have one test class 
+		corresponding to the class-under-test. However, some test gets really complicated, 
+		or test really large classes. The test code grows really fast. In this case, it is 
+		always acceptable to split one test class into multiple. 
+
+		In some cases, you may create one testing class per method contained in the 
+		class-under-test; in other cases, you may find logical grouping of methods you
+		want to test into a single test class. This really becomes a jugement called 
+		depending on the situation.
+
+		Just bear in mind, it important to keep your test class manageable.
+
+	->	Verfication: 
+		This step involves the assertion of the result from the method-under-test. This is 
+		typically the most important part of the test, but often the most overlooked.
+		As a general approach, you should verify the result in object as well as any data set
+		on the object by the method-under-test.
+
+		It helps ensure you have coded correctly, as well as ensure that this method is covered
+		in later iteration of development when other starts changing code. This helps catch
+		inadvertent consequences related to changes made in support phase of an application.
+
+	->	Teardown:
+		This step involves the clearing any data or fixtures created during setup. This typically
+		involves the removal of any persistent data created during or for our test, or release
+		any resources acquired which do not need like database connections. This also covers deleting
+		any files that might have been created during test execution. 
+		
+		Ideally, you will achieve 100% code coverage, which simply means all paths of code are
+		executed when running your suite of tests. You need to be careful though, developers 
+		can be deceived and believe that they have thourough test, simply they have complete code
+		coverage.
+
+		I have seen instances where developers have a 100% coverage, but they did not validate
+		anything more than the result of the method-under-test. Validation is as important as
+		the amount of the code coverage, especially it involves the primary execution in
+		your code.
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+---------------------- Junit Core Constructs ----------------------------
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+-> 	Test
+	
+	Junit classes are standard Java classes. All annoations related to the 4
+	steps are in the package "org.junit"
+
+	Test method are marked with the @Test annotation. This annotation inform 
+	the framework of the method in the testing class, that will execute the
+	methods in that class and perform verification. This allows the test runner
+	program to coordinate execution and display the path failure indicator for
+	each of the tests.
+
+->	Verification
+	
+	Verfication is handled in the test method directly or indirectly. Junit
+	provides two general approaches for performing these verfications. 
+	
+	The first approach is through the Assert class "org.junit.Assert.*". This
+	class contains a set of static methods which trigger the test to fail when
+	resulting evalution does not return true. This is a more traditional approach
+	for verifying the test results.
+
+	Hamcrest is an additional library prividing extension to Junit framework's
+	assertion mechanism. This provides an alternative for declaring assertion that
+	some consider more readable.
+
+	Hamcrest uses domain specifc language for validations, specifying first the actual
+	value, and then using a matcher to state the expected value as the second parameter.
+
+	Many feel this is a more natural language for assertion. It is best to perform 
+	assertion directly inside your test method, I call this direct verification. 
+	
+	However a large number of verification statements can make the test difficault to read. 
+	When it happens, you can resort to a helper method inside your testing class or a utility
+	class to make your test class concise and readable. I refer to this approach as indirect 
+	verification.
+
+	@Before/@BeforeClass
+	@After/@AfterClass
